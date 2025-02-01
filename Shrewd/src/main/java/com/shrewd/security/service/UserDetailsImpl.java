@@ -1,4 +1,4 @@
-package com.shrewd.security.service.user;
+package com.shrewd.security.service;
 
 import com.shrewd.model.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,11 +8,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
+
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> authority;
 
-    private UserDetailsImpl(String username, String password,Collection<? extends GrantedAuthority> authority) {
+    private UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authority) {
         this.username = username;
         this.password = password;
         this.authority = authority;
@@ -21,11 +22,10 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(User user) {
-        GrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getRoleName().name());
         return new UserDetailsImpl(
                 user.getEmail(),
                 user.getPassword(),
-                List.of(authority)
+                user.getAuthorities()
         );
     }
 

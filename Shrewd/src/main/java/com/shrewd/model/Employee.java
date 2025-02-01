@@ -2,7 +2,6 @@ package com.shrewd.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.shrewd.model.roles.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -15,33 +14,29 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Organization implements User{
+@Entity
+public class Employee implements User{
 
-
-    public Organization(String userName, String email, String password) {
-        this.username = userName;
+    public Employee(String username, String email, String password) {
+        this.username = username;
         this.email = email;
         this.password = password;
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String orgId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
 
-    private String orgName;
     private String username;
     private String email;
+    private String name;
     private String phone;
-    private String address;
 
     @Size(max = 120)
     @Column(name = "password")
@@ -70,7 +65,8 @@ public class Organization implements User{
     @UpdateTimestamp
     private LocalDateTime updatedDate;
 
-    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Employee> employees = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id", nullable = false)
+    @JsonBackReference
+    private Organization organization;
 }
