@@ -16,4 +16,6 @@ public interface OrganizationRepository extends JpaRepository<Organization, Stri
     boolean existsByEmail(String mail);
 
     boolean existsByUsername(@NotBlank @Size(min = 3, max = 20) String username);
+
+    Organization findByTenantId(String tenantId);
 }

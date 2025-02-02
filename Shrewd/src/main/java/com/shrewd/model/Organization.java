@@ -1,30 +1,23 @@
 package com.shrewd.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.shrewd.model.roles.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Organization implements User{
+@Table(name = "organization")
+public class Organization{
 
 
     public Organization(String userName, String email, String password) {
@@ -35,8 +28,10 @@ public class Organization implements User{
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "org_id")
     private String orgId;
 
+    @Column(name = "org_name")
     private String orgName;
     private String username;
     private String email;
@@ -48,29 +43,30 @@ public class Organization implements User{
     @JsonIgnore
     private String password;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
-    @JsonBackReference
-    @ToString.Exclude
-    private Role role;
+    @Column(unique = true, nullable = false, name = "tenant_id")
+    private String tenantId;
 
-
+    @Column(name = "account_non_locked")
     private boolean accountNonLocked;
+
+    @Column(name = "account_non_expired")
     private boolean accountNonExpired;
+
+    @Column(name = "credentials_non_expired")
     private boolean credentialsNonExpired;
     private boolean enabled;
 
+    @Column(name = "credentials_expiry_date")
     private LocalDate credentialsExpiryDate;
+    @Column(name = "account_expiry_date")
     private LocalDate accountExpiryDate;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(updatable = false, name="created_date")
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
+    @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
-    @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Employee> employees = new ArrayList<>();
 }

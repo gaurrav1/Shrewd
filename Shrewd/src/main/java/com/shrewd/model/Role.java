@@ -1,8 +1,6 @@
-package com.shrewd.model.roles;
+package com.shrewd.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.shrewd.model.Employee;
-import com.shrewd.model.Organization;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,10 +35,5 @@ public class Role {
     @ToString.Exclude
     @JsonBackReference
     private Set<Employee> employees = new HashSet<>();
-
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
-    @ToString.Exclude
-    @JsonBackReference
-    private Set<Organization> organizations = new HashSet<>();
 
 }

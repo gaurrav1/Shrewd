@@ -18,12 +18,12 @@ public class OrgRegisterRequest {
     @Email
     private String email;
 
-    @Setter
-    @Getter
-    private Set<String> role;
-
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+
+    @NotBlank
+    @Size(min = 3, max = 40)
+    private String tenant;
 
 }

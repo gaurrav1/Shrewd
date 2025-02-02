@@ -1,16 +1,15 @@
 package com.shrewd.controller.auth;
 
 import com.shrewd.model.Organization;
-import com.shrewd.model.roles.ROLES;
-import com.shrewd.model.roles.Role;
 import com.shrewd.repository.OrganizationRepository;
-import com.shrewd.repository.roles.RolesRepository;
 import com.shrewd.security.communication.request.LoginRequest;
 import com.shrewd.security.communication.request.OrgRegisterRequest;
 import com.shrewd.security.communication.response.LoginResponse;
+import com.shrewd.tenantConfig.service.DataSourceService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,18 +30,19 @@ public class OrganizationAuthController {
 
     private final OrganizationRepository organizationRepository;
     private final PasswordEncoder passwordEncoder;
-    private final RolesRepository rolesRepository;
     private final AuthenticationManager authenticationManager;
+    private final DataSourceService dataSourceService;
+    private final JdbcTemplate jdbcTemplate;
 
     public OrganizationAuthController(
             OrganizationRepository organizationRepository,
             PasswordEncoder passwordEncoder,
-            RolesRepository rolesRepository,
-            AuthenticationManager authenticationManager) {
+            AuthenticationManager authenticationManager, DataSourceService dataSourceService, JdbcTemplate jdbcTemplate) {
         this.organizationRepository = organizationRepository;
         this.passwordEncoder = passwordEncoder;
-        this.rolesRepository = rolesRepository;
         this.authenticationManager = authenticationManager;
+        this.dataSourceService = dataSourceService;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @PostMapping("/register")
@@ -56,34 +54,56 @@ public class OrganizationAuthController {
             return ResponseEntity.badRequest().body("Error: Username is already in use.");
         }
 
-        Set<String> strRoles = registerRequest.getRole();
-        if (strRoles.isEmpty()) {
-            return ResponseEntity.badRequest().body("Error: Role is required.");
-        }
-
-        Optional<Role> roleOpt = rolesRepository.findByRoleName(ROLES.ORGANIZATION);
-
-        if (roleOpt.isEmpty()) {
-            return ResponseEntity.badRequest().body("Error: Role is not found.");
-        }
-
         Organization organization = new Organization(
                 registerRequest.getUsername(),
                 registerRequest.getEmail(),
                 passwordEncoder.encode(registerRequest.getPassword())
         );
-
         organization.setAccountNonLocked(true);
         organization.setAccountNonExpired(true);
         organization.setCredentialsNonExpired(true);
         organization.setEnabled(true);
         organization.setCredentialsExpiryDate(LocalDate.now().plusYears(1));
         organization.setAccountExpiryDate(LocalDate.now().plusYears(1));
-        organization.setRole(roleOpt.get());
+        organization.setTenantId(passwordEncoder.encode(registerRequest.getTenant()));
+        organization.setUsername(registerRequest.getUsername());
+
+
+
+//        String tenantId = registerRequest.getUsername();
+//        String createDatabaseQuery = "CREATE DATABASE org_" + tenantId;
+//        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306", "gaurav", "NGaurav@113")) {
+//            Statement stmt = connection.createStatement();
+//            stmt.executeUpdate(createDatabaseQuery);
+//            stmt.close();
+//        } catch (SQLException e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error: Failed to create tenant database.");
+//        }
+
+        String createDb = createTenantDatabase(registerRequest.getUsername());
+        if (!createDb.equals("Database created successfully.")) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createDb);
+        }
+
+        try {
+            dataSourceService.registerTenantDataSource(registerRequest.getUsername());
+        } catch (Exception e) {
+            System.out.println("\n\n\n\n\n\n" + e.getMessage());
+        }
 
         organizationRepository.save(organization);
-
         return ResponseEntity.ok("Organization registered successfully.");
+    }
+
+    public String createTenantDatabase(String username) {
+        String createDatabaseQuery = "CREATE DATABASE IF NOT EXISTS org_" + username;
+
+        try {
+            jdbcTemplate.execute(createDatabaseQuery);
+            return "Database created successfully.";
+        } catch (Exception e) {
+            return "Error: Failed to create tenant database.";
+        }
     }
 
     @PostMapping("/login")

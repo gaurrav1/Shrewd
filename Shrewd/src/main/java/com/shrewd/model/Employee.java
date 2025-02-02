@@ -2,7 +2,6 @@ package com.shrewd.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.shrewd.model.roles.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -14,14 +13,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Employee implements User{
+public class Employee implements User {
 
     public Employee(String username, String email, String password) {
         this.username = username;
@@ -65,8 +62,4 @@ public class Employee implements User{
     @UpdateTimestamp
     private LocalDateTime updatedDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "org_id", nullable = false)
-    @JsonBackReference
-    private Organization organization;
 }

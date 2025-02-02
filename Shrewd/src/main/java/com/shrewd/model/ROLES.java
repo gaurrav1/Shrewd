@@ -1,4 +1,4 @@
-package com.shrewd.model.roles;
+package com.shrewd.model;
 
 import lombok.Getter;
 
