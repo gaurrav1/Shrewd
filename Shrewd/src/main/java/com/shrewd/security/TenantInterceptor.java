@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class TenantInterceptor implements Filter {
@@ -22,14 +23,14 @@ public class TenantInterceptor implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-
-
         String requestPath = httpServletRequest.getRequestURI();
 
-        if (requestPath.startsWith("/organization/auth")) {
-            // Skip tenant validation and proceed with the chain
+        List<String> EXCLUDED_PATHS = List.of("/organization/auth");
+
+        if (EXCLUDED_PATHS.stream().anyMatch(requestPath::startsWith)) {
+            // Skip tenant validation for these paths
             chain.doFilter(request, response);
-            return; // Return here to skip the rest of the filter logic
+            return;
         }
         // Retrieve tenantId from the request header
         String tenantId = httpServletRequest.getHeader("X-Organization-ID");

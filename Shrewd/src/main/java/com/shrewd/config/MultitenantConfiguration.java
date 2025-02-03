@@ -30,12 +30,12 @@ public class MultitenantConfiguration {
         Map<Object, Object> resolvedDataSources = new HashMap<>();
 
         DataSource defaultDataSource = createDataSource("shrewd");
-        resolvedDataSources.put("shrewd", defaultDataSource);
+        resolvedDataSources.put("etrhefhredtghbrtghbrtghrtdgh", defaultDataSource);
 
         loadExistingTenants(resolvedDataSources);
 
         AbstractRoutingDataSource dataSource = new DynamicDataSource();
-        String defaultTenant = "shrewd";
+        String defaultTenant = "etrhefhredtghbrtghbrtghrtdgh";
         dataSource.setDefaultTargetDataSource(resolvedDataSources.get(defaultTenant));
         dataSource.setTargetDataSources(resolvedDataSources);
 

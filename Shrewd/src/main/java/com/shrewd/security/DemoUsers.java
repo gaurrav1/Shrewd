@@ -26,6 +26,7 @@ public class DemoUsers {
     @Bean
     public CommandLineRunner initData(OrganizationRepository orgRepository, CreatingOrganization creatingOrganization, RolesRepository rolesRepository, TenantContext tenantContext, EmployeeRepository employeeRepository) {
         return args -> {
+            System.out.println("\n\n\nInside CommandLineRunner\n\n\n");
 
             if(!orgRepository.existsByEmail("org1@gmail.com")) {
                 OrgRegisterRequest organizationRequest = new OrgRegisterRequest();
