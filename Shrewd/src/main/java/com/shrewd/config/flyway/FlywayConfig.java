@@ -1,4 +1,4 @@
-package com.shrewd.tenantConfig;
+package com.shrewd.config.flyway;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +12,8 @@ public class FlywayConfig {
     @Bean
     public Flyway flyway(DataSource dataSource) {
         return Flyway.configure()
-            .dataSource(dataSource)
-            .locations("classpath:db/migration")
-            .load();
+                .dataSource(dataSource)
+                .locations("classpath:db/migration")
+                .load();
     }
 }

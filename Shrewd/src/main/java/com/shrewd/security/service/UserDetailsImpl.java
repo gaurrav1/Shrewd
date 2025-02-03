@@ -1,6 +1,6 @@
 package com.shrewd.security.service;
 
-import com.shrewd.model.User;
+import com.shrewd.model.users.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;

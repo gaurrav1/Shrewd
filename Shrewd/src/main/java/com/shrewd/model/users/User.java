@@ -1,4 +1,4 @@
-package com.shrewd.model;
+package com.shrewd.model.users;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

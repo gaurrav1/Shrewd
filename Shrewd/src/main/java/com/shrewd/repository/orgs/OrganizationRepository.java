@@ -1,6 +1,6 @@
-package com.shrewd.repository;
+package com.shrewd.repository.orgs;
 
-import com.shrewd.model.Organization;
+import com.shrewd.model.orgs.Organization;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;

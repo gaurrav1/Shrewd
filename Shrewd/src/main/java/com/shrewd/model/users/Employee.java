@@ -1,4 +1,4 @@
-package com.shrewd.model;
+package com.shrewd.model.users;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "employee")
 public class Employee implements User {
 
     public Employee(String username, String email, String password) {
@@ -28,7 +29,9 @@ public class Employee implements User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long userId;
+
 
     private String username;
     private String email;
@@ -47,19 +50,27 @@ public class Employee implements User {
     private Role role;
 
 
+    @Column(name = "account_non_locked")
     private boolean accountNonLocked;
+
+    @Column(name = "account_non_expired")
     private boolean accountNonExpired;
+
+    @Column(name = "credentials_non_expired")
     private boolean credentialsNonExpired;
     private boolean enabled;
 
+    @Column(name = "credentials_expiry_date")
     private LocalDate credentialsExpiryDate;
+    @Column(name = "account_expiry_date")
     private LocalDate accountExpiryDate;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(updatable = false, name = "created_date")
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
+    @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
 }

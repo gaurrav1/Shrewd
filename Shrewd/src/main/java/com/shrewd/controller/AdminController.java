@@ -1,6 +1,6 @@
 package com.shrewd.controller;
 
-import com.shrewd.model.Employee;
+import com.shrewd.model.users.Employee;
 import com.shrewd.service.AdminServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

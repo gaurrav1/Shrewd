@@ -1,7 +1,7 @@
 package com.shrewd.service;
 
-import com.shrewd.model.Employee;
-import com.shrewd.repository.EmployeeRepository;
+import com.shrewd.model.users.Employee;
+import com.shrewd.repository.users.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

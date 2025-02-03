@@ -1,8 +1,8 @@
 package com.shrewd.security.service;
 
-import com.shrewd.model.User;
-import com.shrewd.repository.EmployeeRepository;
-import com.shrewd.repository.OrganizationRepository;
+import com.shrewd.model.users.User;
+import com.shrewd.repository.users.EmployeeRepository;
+import com.shrewd.repository.orgs.OrganizationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

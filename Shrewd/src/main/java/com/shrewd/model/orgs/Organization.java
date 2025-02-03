@@ -1,4 +1,4 @@
-package com.shrewd.model;
+package com.shrewd.model.orgs;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

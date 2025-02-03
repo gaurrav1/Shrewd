@@ -1,7 +1,7 @@
-package com.shrewd.repository.roles;
+package com.shrewd.repository.users.roles;
 
-import com.shrewd.model.Role;
-import com.shrewd.model.ROLES;
+import com.shrewd.model.users.Role;
+import com.shrewd.model.users.ROLES;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
