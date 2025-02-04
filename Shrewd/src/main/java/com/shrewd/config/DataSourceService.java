@@ -4,15 +4,18 @@ import com.shrewd.config.hibernate.TenantContext;
 import com.shrewd.security.communication.request.RegisterRequest;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
 
 @Service
 public class DataSourceService {
     private final DynamicDataSource dynamicDataSource;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataSourceService(DynamicDataSource dynamicDataSource) {
+    public DataSourceService(DynamicDataSource dynamicDataSource, PasswordEncoder passwordEncoder) {
         this.dynamicDataSource = dynamicDataSource;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public void registerTenantDataSource(String tenantId) {
@@ -93,7 +96,7 @@ public class DataSourceService {
                     registerRequest.getEmail(),
                     registerRequest.getName(),
                     registerRequest.getPhone(),
-                    registerRequest.getPassword(),
+                    passwordEncoder.encode(registerRequest.getPassword()),
                     1,
                     true, // account_non_locked
                     true, // account_non_expired
