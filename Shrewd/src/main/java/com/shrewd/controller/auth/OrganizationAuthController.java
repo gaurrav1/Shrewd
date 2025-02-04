@@ -1,7 +1,7 @@
 package com.shrewd.controller.auth;
 
 import com.shrewd.security.communication.request.OrgRegisterRequest;
-import com.shrewd.service.CreatingOrganization;
+import com.shrewd.service.implemantation.OrganizationServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +10,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/organization/auth")
 public class OrganizationAuthController {
 
-    private final CreatingOrganization creatingOrganization;
+    private final OrganizationServiceImpl organizationServiceImpl;
 
-    public OrganizationAuthController(CreatingOrganization creatingOrganization) {
-        this.creatingOrganization = creatingOrganization;
+    public OrganizationAuthController(OrganizationServiceImpl organizationServiceImpl) {
+        this.organizationServiceImpl = organizationServiceImpl;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody OrgRegisterRequest registerRequest) {
-        return creatingOrganization.createOrganization(registerRequest);
+        System.out.println("\n\n\n\n\n\nHehe\n\n");
+        return organizationServiceImpl.createOrganization(registerRequest);
     }
 }

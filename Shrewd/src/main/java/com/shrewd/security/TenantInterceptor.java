@@ -5,6 +5,8 @@ import com.shrewd.repository.orgs.OrganizationRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,34 +26,31 @@ public class TenantInterceptor implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String requestPath = httpServletRequest.getRequestURI();
-
+        System.out.println("\n\n\nAAAAAAAAAAAA\n\n\n");
         List<String> EXCLUDED_PATHS = List.of("/organization/auth");
 
+        System.out.println("\n\n\nBBBBBBBBBBBBBB\n\n\n");
         if (EXCLUDED_PATHS.stream().anyMatch(requestPath::startsWith)) {
-            // Skip tenant validation for these paths
+            System.out.println("\n\n\n BYPASSING TENANT INTERCEPTOR \n\n\n");
             chain.doFilter(request, response);
             return;
         }
-        // Retrieve tenantId from the request header
+        System.out.println("\n\n\nCCCCCCCCCCCCCCCCC\n\n\n");
         String tenantId = httpServletRequest.getHeader("X-Organization-ID");
 
         if (tenantId == null || tenantId.isEmpty()) {
-            // If tenant ID is missing, respond with an error
             httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             httpServletResponse.getWriter().write("You don't belong to any organization. Please provide a valid Tenant ID.");
-            return; // Stop further processing
+            return;
         }
-
-        // Check if the tenant ID is valid (exists in the organization repository)
-        boolean tenantExists = organizationRepository.existsByUsername(tenantId); // Assuming existsById is a valid method
+        System.out.println("\n\n\nDDDDDDDDDDDDDD\n\n\n");
+        boolean tenantExists = organizationRepository.existsByTenantId(tenantId);
         if (!tenantExists) {
-            // If tenant ID is invalid, respond with an error
             httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
             httpServletResponse.getWriter().write("Invalid Tenant ID. You don't belong to any organization.");
-            return; // Stop further processing
+            return;
         }
 
-        // Set the tenant context for further processing
         TenantContext.setCurrentTenant(tenantId);
 
         try {

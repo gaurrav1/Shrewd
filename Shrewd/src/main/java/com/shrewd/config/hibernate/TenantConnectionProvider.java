@@ -1,6 +1,8 @@
 package com.shrewd.config.hibernate;
 
+import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -10,7 +12,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class TenantConnectionProvider implements MultiTenantConnectionProvider<String> {
+public class TenantConnectionProvider implements MultiTenantConnectionProvider<String>, HibernatePropertiesCustomizer {
 
     @Override
     public boolean isUnwrappableAs(Class unwrapType) {
@@ -69,5 +71,9 @@ public class TenantConnectionProvider implements MultiTenantConnectionProvider<S
 //        throw new IllegalArgumentException("Cannot unwrap to " + unwrapType);
 //    }
 
+    @Override
+    public void customize(Map<String, Object> hibernateProperties) {
+        hibernateProperties.put(AvailableSettings.MULTI_TENANT_CONNECTION_PROVIDER, this);
+    }
 
 }

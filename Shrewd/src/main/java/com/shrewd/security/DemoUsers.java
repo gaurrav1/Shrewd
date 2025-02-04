@@ -9,7 +9,7 @@ import com.shrewd.repository.orgs.OrganizationRepository;
 import com.shrewd.repository.users.EmployeeRepository;
 import com.shrewd.repository.users.roles.RolesRepository;
 import com.shrewd.security.communication.request.OrgRegisterRequest;
-import com.shrewd.service.CreatingOrganization;
+import com.shrewd.service.implemantation.OrganizationServiceImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +24,7 @@ public class DemoUsers {
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(12);
 
     @Bean
-    public CommandLineRunner initData(OrganizationRepository orgRepository, CreatingOrganization creatingOrganization, RolesRepository rolesRepository, TenantContext tenantContext, EmployeeRepository employeeRepository) {
+    public CommandLineRunner initData(OrganizationRepository orgRepository, OrganizationServiceImpl organizationServiceImpl, RolesRepository rolesRepository, EmployeeRepository employeeRepository) {
         return args -> {
             System.out.println("\n\n\nInside CommandLineRunner\n\n\n");
 
@@ -33,9 +33,12 @@ public class DemoUsers {
                 organizationRequest.setUsername("organization1");
                 organizationRequest.setPassword("Abcd@1234");
                 organizationRequest.setEmail("org1@gmail.com");
-                organizationRequest.setTenant("uniqueTenantId1");
+                organizationRequest.setTenant("one");
+                organizationRequest.setOrg_name("Organization 1");
+                organizationRequest.setPhone("1234567890");
+                organizationRequest.setAddress("123, Street, City, State, Country");
 
-                creatingOrganization.createOrganization(organizationRequest);
+                organizationServiceImpl.createOrganization(organizationRequest);
             }
 
             if(!orgRepository.existsByEmail("shrewd@gmail.com")) {
@@ -43,9 +46,12 @@ public class DemoUsers {
                 organizationRequest2.setUsername("shrewdtwo");
                 organizationRequest2.setPassword("shrewd@1234");
                 organizationRequest2.setEmail("shrewd@gmail.com");
-                organizationRequest2.setTenant("uniqueshrewdId1");
+                organizationRequest2.setTenant("two");
+                organizationRequest2.setOrg_name("Shrewd Organization");
+                organizationRequest2.setPhone("1234567890");
+                organizationRequest2.setAddress("123, Street, City, State, Country");
 
-                creatingOrganization.createOrganization(organizationRequest2);
+                organizationServiceImpl.createOrganization(organizationRequest2);
             }
 
             // Fetch the organization after creation
@@ -54,7 +60,7 @@ public class DemoUsers {
 
             System.out.println("Organization 1: " + org1 + "\n\n\n" + org1.toString());
 
-            tenantContext.setCurrentTenant("shrewdtwo"); // Set tenant context for dynamic datasource
+            TenantContext.setCurrentTenant("one"); // Set tenant context for dynamic datasource
 
             // Role Initialization for demo employees
             Role adminRole = rolesRepository.findByRoleName(ROLES.ADMIN)
@@ -95,7 +101,7 @@ public class DemoUsers {
                 employeeRepository.save(hr);
             }
 
-            tenantContext.setCurrentTenant("organization1");
+            TenantContext.setCurrentTenant("two");
 
             if (!employeeRepository.existsByEmail("manager@user.com")) {
                 Employee manager = new Employee("manager", "manager@user.com", passwordEncoder.encode("manager@123"));
@@ -122,7 +128,7 @@ public class DemoUsers {
             }
 
             // Reset TenantContext after operations are complete (Optional)
-            tenantContext.clear();
+            TenantContext.clear();
         };
     }
 }

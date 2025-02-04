@@ -1,12 +1,17 @@
 package com.shrewd.config.hibernate;
 
+import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.cfg.Environment;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 import javax.sql.DataSource;
@@ -14,6 +19,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@EnableJpaRepositories(
+        basePackages = "com.shrewd",
+        entityManagerFactoryRef = "entityManagerFactory",
+        transactionManagerRef = "transactionManager"
+)
+@EnableTransactionManagement
 public class HibernateMultiTenancyConfig {
 
     private final JpaProperties jpaProperties;
@@ -23,7 +34,7 @@ public class HibernateMultiTenancyConfig {
     }
 
     @Bean
-    public JpaVendorAdapter jpaVendorAdapter() {
+    public HibernateJpaVendorAdapter jpaVendorAdapter() {
         return new HibernateJpaVendorAdapter();
     }
 
@@ -33,20 +44,33 @@ public class HibernateMultiTenancyConfig {
             TenantConnectionProvider tenantConnectionProvider,
             TenantIdentifierResolver tenantIdentifierResolver) {
 
-        Map<String, Object> jpaPropertiesMap = new HashMap<>(jpaProperties.getProperties());
+        HibernateJpaVendorAdapter vendorAdapter = this.jpaVendorAdapter();
+        vendorAdapter.setGenerateDdl(false);
 
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setPackagesToScan("com.shrewd");
+        em.setDataSource(masterDataSource);
+
+        Map<String, Object> jpaPropertiesMap = new HashMap<>(jpaProperties.getProperties());
         jpaPropertiesMap.put(Environment.MULTI_TENANT_CONNECTION_PROVIDER, tenantConnectionProvider);
         jpaPropertiesMap.put(Environment.MULTI_TENANT_IDENTIFIER_RESOLVER, tenantIdentifierResolver);
         jpaPropertiesMap.put(Environment.FORMAT_SQL, true);
         jpaPropertiesMap.put("hibernate.hbm2ddl.auto", "none");
         jpaPropertiesMap.put("hibernate.show_sql", true);
+        jpaPropertiesMap.put("hibernate.cache.use_second_level_cache", false);
+        jpaPropertiesMap.put("hibernate.cache.use_query_cache", false);
 
-        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(masterDataSource);
-        em.setPackagesToScan("com.shrewd.model");
-        em.setJpaVendorAdapter(this.jpaVendorAdapter());
         em.setJpaPropertyMap(jpaPropertiesMap);
 
         return em;
+    }
+
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+
+        JpaTransactionManager txManager = new JpaTransactionManager();
+        txManager.setEntityManagerFactory(entityManagerFactory);
+        return txManager;
     }
 }

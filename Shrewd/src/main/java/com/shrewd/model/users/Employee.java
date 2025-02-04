@@ -49,7 +49,6 @@ public class Employee implements User {
     @ToString.Exclude
     private Role role;
 
-
     @Column(name = "account_non_locked")
     private boolean accountNonLocked;
 
