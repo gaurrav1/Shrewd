@@ -2,12 +2,12 @@ package com.shrewd.config.hibernate;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.cfg.Environment;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -21,8 +21,8 @@ import java.util.Map;
 @Configuration
 @EnableJpaRepositories(
         basePackages = "com.shrewd",
-        entityManagerFactoryRef = "entityManagerFactory",
-        transactionManagerRef = "transactionManager"
+        entityManagerFactoryRef = "customEntityManagerFactory",
+        transactionManagerRef = "customTransactionManager"
 )
 @EnableTransactionManagement
 public class HibernateMultiTenancyConfig {
@@ -38,7 +38,7 @@ public class HibernateMultiTenancyConfig {
         return new HibernateJpaVendorAdapter();
     }
 
-    @Bean
+    @Bean(name = "customEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             DataSource masterDataSource,
             TenantConnectionProvider tenantConnectionProvider,
@@ -66,8 +66,8 @@ public class HibernateMultiTenancyConfig {
         return em;
     }
 
-    @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+    @Bean(name = "customTransactionManager")
+    public PlatformTransactionManager transactionManager(@Qualifier("customEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
 
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory);

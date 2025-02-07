@@ -1,27 +1,20 @@
-package com.shrewd.service.helperMethods;
+package com.shrewd.service.organization.helperMethods;
 
-import com.shrewd.config.DataSourceService;
-import com.shrewd.config.hibernate.TenantContext;
+import com.shrewd.service.database.DataSourceService;
 import com.shrewd.model.orgs.Organization;
 import com.shrewd.repository.orgs.OrganizationRepository;
-import com.shrewd.repository.users.roles.RolesRepository;
 import com.shrewd.security.communication.request.OrgRegisterRequest;
 import com.shrewd.security.communication.request.RegisterRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RegisterOrganization {
 
     private final OrganizationRepository organizationRepository;
-    private final RolesRepository rolesRepository;
-    private final PasswordEncoder passwordEncoder;
     private final DataSourceService dataSourceService;
 
-    public RegisterOrganization(OrganizationRepository organizationRepository, RolesRepository rolesRepository, PasswordEncoder passwordEncoder, DataSourceService dataSourceService) {
+    public RegisterOrganization(OrganizationRepository organizationRepository,DataSourceService dataSourceService) {
         this.organizationRepository = organizationRepository;
-        this.rolesRepository = rolesRepository;
-        this.passwordEncoder = passwordEncoder;
         this.dataSourceService = dataSourceService;
     }
 
@@ -42,7 +35,15 @@ public class RegisterOrganization {
 
     public void initializeTenant(String tenant, RegisterRequest registerRequest) {
         dataSourceService.registerTenantDataSource(tenant, registerRequest);
-        TenantContext.setCurrentTenant(tenant);
     }
 
+    public RegisterRequest createEmployeeEntity(OrgRegisterRequest registerRequest) {
+        RegisterRequest empRegisterRequest = new RegisterRequest();
+        empRegisterRequest.setUsername(registerRequest.getUsername());
+        empRegisterRequest.setEmail(registerRequest.getEmail());
+        empRegisterRequest.setPassword(registerRequest.getPassword());
+        empRegisterRequest.setName(registerRequest.getOrg_name());
+        empRegisterRequest.setPhone(registerRequest.getPhone());
+        return empRegisterRequest;
+    }
 }

@@ -1,7 +1,7 @@
-package com.shrewd.controller;
+package com.shrewd.controller.users;
 
-import com.shrewd.model.users.Employee;
-import com.shrewd.service.implemantation.AdminServicesImpl;
+import com.shrewd.model.users.Users;
+import com.shrewd.service.users.AdminServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,15 +11,15 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final AdminServicesImpl adminServicesImpl;
+    private final AdminServices adminServices;
 
-    public AdminController(AdminServicesImpl adminServicesImpl) {
-        this.adminServicesImpl = adminServicesImpl;
+    public AdminController(AdminServices adminServices) {
+        this.adminServices = adminServices;
     }
 
     @GetMapping("/getusers")
-    public ResponseEntity<List<Employee>> getAllUsers() {
-        List<Employee> users = adminServicesImpl.getAllUsers();
+    public ResponseEntity<List<Users>> getAllUsers() {
+        List<Users> users = adminServices.getAllUsers();
         return users.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(users);
     }
 

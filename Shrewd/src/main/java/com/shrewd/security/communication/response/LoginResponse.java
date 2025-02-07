@@ -8,14 +8,16 @@ import java.util.List;
 @Setter
 @Getter
 public class LoginResponse {
-//    private String jwtToken;
     private String username;
     private List<String> roles;
+    private String jwtToken;
+    private String tenantId;
 
-    public LoginResponse(String username, List<String> roles) {
+    public LoginResponse(String username, List<String> roles, String jwtToken, String tenantId) {
         this.username = username;
         this.roles = roles;
-//        this.jwtToken = jwtToken;
+        this.jwtToken = jwtToken;
+        this.tenantId = tenantId;
     }
 
 }

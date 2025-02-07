@@ -1,6 +1,4 @@
-package com.shrewd.config.hibernate;
-
-import org.springframework.stereotype.Component;
+package com.shrewd.config;
 
 public class TenantContext {
 	private static final ThreadLocal<String> currentTenant = new ThreadLocal<>();

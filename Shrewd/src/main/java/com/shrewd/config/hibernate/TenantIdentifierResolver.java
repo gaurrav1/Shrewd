@@ -1,5 +1,6 @@
 package com.shrewd.config.hibernate;
 
+import com.shrewd.config.TenantContext;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
@@ -10,7 +11,9 @@ import java.util.Map;
 @Component
 public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver<String>, HibernatePropertiesCustomizer {
 
-    private static final String DEFAULT_TENANT = "shrewd";
+    private static final String default_tenant_name = "shrewd";
+
+    private static final String DEFAULT_TENANT = default_tenant_name;
 
     @Override
     public String resolveCurrentTenantIdentifier() {

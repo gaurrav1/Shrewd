@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum ROLES {
     ORGANIZATION("Organization", "Handles the overall organization management"),
     ADMIN("Admin", "Manages users, settings, and policies"),
-    HR("HR", "Handles employee relations and payroll"),
+    HR("HR", "Handles users relations and payroll"),
     MANAGER("Manager", "Oversees teams and operations"),
     EMPLOYEE("Employee", "Works on the tasks assigned by managers");
 

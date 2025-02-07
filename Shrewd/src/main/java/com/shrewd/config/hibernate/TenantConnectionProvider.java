@@ -57,20 +57,6 @@ public class TenantConnectionProvider implements MultiTenantConnectionProvider<S
         return false;
     }
 
-//    @Override
-//    public boolean isUnwrappableAs(Class<?> unwrapType) {
-//        return MultiTenantConnectionProvider.class.isAssignableFrom(unwrapType);
-//    }
-//
-//    @Override
-//    @SuppressWarnings("unchecked")
-//    public <T> T unwrap(Class<T> unwrapType) {
-//        if (isUnwrappableAs(unwrapType)) {
-//            return (T) this;
-//        }
-//        throw new IllegalArgumentException("Cannot unwrap to " + unwrapType);
-//    }
-
     @Override
     public void customize(Map<String, Object> hibernateProperties) {
         hibernateProperties.put(AvailableSettings.MULTI_TENANT_CONNECTION_PROVIDER, this);

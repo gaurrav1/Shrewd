@@ -1,23 +1,21 @@
-package com.shrewd.security;
+package com.shrewd.security.tenant;
 
-import com.shrewd.config.hibernate.TenantContext;
+import com.shrewd.config.TenantContext;
 import com.shrewd.repository.orgs.OrganizationRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 
 @Component
-public class TenantInterceptor implements Filter {
+public class TenantFilter implements Filter {
 
     private final OrganizationRepository organizationRepository;
 
-    public TenantInterceptor(OrganizationRepository organizationRepository) {
+    public TenantFilter(OrganizationRepository organizationRepository) {
         this.organizationRepository = organizationRepository;
     }
 
@@ -26,32 +24,33 @@ public class TenantInterceptor implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String requestPath = httpServletRequest.getRequestURI();
-        System.out.println("\n\n\nAAAAAAAAAAAA\n\n\n");
-        List<String> EXCLUDED_PATHS = List.of("/organization/auth");
 
-        System.out.println("\n\n\nBBBBBBBBBBBBBB\n\n\n");
+        List<String> EXCLUDED_PATHS = List.of("/auth/organization/register","/auth/csrf/csrf-token");
+
+
         if (EXCLUDED_PATHS.stream().anyMatch(requestPath::startsWith)) {
             System.out.println("\n\n\n BYPASSING TENANT INTERCEPTOR \n\n\n");
             chain.doFilter(request, response);
             return;
         }
-        System.out.println("\n\n\nCCCCCCCCCCCCCCCCC\n\n\n");
+
         String tenantId = httpServletRequest.getHeader("X-Organization-ID");
 
         if (tenantId == null || tenantId.isEmpty()) {
             httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            httpServletResponse.getWriter().write("You don't belong to any organization. Please provide a valid Tenant ID.");
+            httpServletResponse.getWriter().write("Tenant ID missing in header.");
             return;
         }
-        System.out.println("\n\n\nDDDDDDDDDDDDDD\n\n\n");
+
         boolean tenantExists = organizationRepository.existsByTenantId(tenantId);
         if (!tenantExists) {
             httpServletResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            httpServletResponse.getWriter().write("Invalid Tenant ID. You don't belong to any organization.");
+            httpServletResponse.getWriter().write("Invalid Tenant ID. Please provide legitimate tenant ID.");
             return;
         }
 
         TenantContext.setCurrentTenant(tenantId);
+        System.out.println("\n\n\n TENANT CONTEXT SET TO: " + TenantContext.getCurrentTenant() + "\n\n\n");
 
         try {
             chain.doFilter(request, response);

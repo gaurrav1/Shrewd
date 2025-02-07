@@ -1,7 +1,7 @@
 package com.shrewd.security.service;
 
 import com.shrewd.model.users.User;
-import com.shrewd.repository.users.EmployeeRepository;
+import com.shrewd.repository.users.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,17 +11,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final EmployeeRepository employeeRepository;
+    private final UsersRepository usersRepository;
 
     @Autowired
-    public CustomUserDetailsService(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
+    public CustomUserDetailsService(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User employee = employeeRepository.findByEmail(username).orElse(null);
+        User employee = usersRepository.findByEmail(username).orElse(null);
 
         if (employee != null) {
             return UserDetailsImpl.build(employee);

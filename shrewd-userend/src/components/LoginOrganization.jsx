@@ -15,10 +15,8 @@ const LoginOrganization = () => {
                 password,
             });
             setMessage(`Login successful! Welcome, ${response.data.name}.`);
-            // Optionally, redirect or store user info
         } catch (error) {
             if (error.response) {
-                // Display the actual error message from the response
                 const errorMessage = error.response.data ? error.response.data : 'Unknown error occurred.';
                 setMessage(`Error: ${errorMessage}`);
             } else {

@@ -1,60 +1,66 @@
-package com.shrewd.config;
-
-import com.shrewd.config.hibernate.TenantContext;
+package com.shrewd.service.database;
 import com.shrewd.security.communication.request.RegisterRequest;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import jakarta.transaction.Transactional;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import javax.sql.DataSource;
 
 @Service
-public class DataSourceService {
-    private final DynamicDataSource dynamicDataSource;
+public class DatabaseService {
+
+    private final JdbcTemplate jdbcTemplate;
     private final PasswordEncoder passwordEncoder;
 
-    public DataSourceService(DynamicDataSource dynamicDataSource, PasswordEncoder passwordEncoder) {
-        this.dynamicDataSource = dynamicDataSource;
+    public DatabaseService(JdbcTemplate jdbcTemplate, PasswordEncoder passwordEncoder) {
+        this.jdbcTemplate = jdbcTemplate;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void registerTenantDataSource(String tenantId) {
-        String dbName = "org_" + tenantId;
-        DataSource dataSource = DataSourceBuilder.create()
-                .url("jdbc:mysql://localhost:3306/" + dbName)
-                .username("gaurav")
-                .password("NGaurav@113")
-                .driverClassName("com.mysql.cj.jdbc.Driver")
-                .build();
-
-        dynamicDataSource.addTargetDataSource(tenantId, dataSource);
+    private boolean isValidTenantName(String tenantId) {
+        return tenantId == null || !tenantId.matches("^[a-zA-Z0-9_-]+$");
     }
 
-    public void registerTenantDataSource(String tenantId, RegisterRequest registerRequest) {
-        String dbName = "org_" + tenantId;
-        DataSource dataSource = DataSourceBuilder.create()
-                .url("jdbc:mysql://localhost:3306/" + dbName)
-                .username("gaurav")
-                .password("NGaurav@113")
-                .driverClassName("com.mysql.cj.jdbc.Driver")
-                .build();
+    public Boolean createDatabaseForTenant(String tenantId) {
+        if (isValidTenantName(tenantId)) {
+            return false;
+        }
 
-        dynamicDataSource.addTargetDataSource(tenantId, dataSource);
+        String createDatabaseQuery = String.format("CREATE DATABASE IF NOT EXISTS org_%s", tenantId);
 
-        TenantContext.setCurrentTenant(tenantId);
-        initializeDatabase(new JdbcTemplate(dataSource), registerRequest);
-        TenantContext.clear();
-    }
-
-    private void initializeDatabase(JdbcTemplate jdbcTemplate, RegisterRequest registerRequest) {
         try {
-            // Create 'roles' table
+            // https://www.digitalocean.com/community/tutorials/sql-injection-in-java
+            jdbcTemplate.execute(createDatabaseQuery);
+            return true;
+        } catch (Exception e) {
+            // Log the exception (use a proper logger instead of System.out.println)
+            return false;
+        }
+    }
+
+    public void deleteDatabaseForTenant(String tenantId) {
+        if (isValidTenantName(tenantId)) {
+            throw new IllegalArgumentException("Invalid tenant name: " + tenantId);
+        }
+
+        String dropDatabaseQuery = String.format("DROP DATABASE IF EXISTS org_%s", tenantId);
+
+        try {
+            jdbcTemplate.execute(dropDatabaseQuery);
+            System.out.println("Database org_" + tenantId + " deleted successfully.");
+        } catch (Exception e) {
+            System.err.println("Error deleting database for tenant: " + tenantId);
+            e.printStackTrace();
+        }
+    }
+
+    @Transactional
+    protected void initializeDatabase(JdbcTemplate jdbcTemplate, RegisterRequest registerRequest) {
+        try {
             String createRolesTable = "CREATE TABLE IF NOT EXISTS roles ("
                     + "role_id INT AUTO_INCREMENT PRIMARY KEY, "
                     + "role_name VARCHAR(20) NOT NULL) ";
 
-            // Create 'employee' table
-            String createEmployeeTable = "CREATE TABLE IF NOT EXISTS employee ("
+            String createEmployeeTable = "CREATE TABLE IF NOT EXISTS users ("
                     + "user_id BIGINT AUTO_INCREMENT PRIMARY KEY, "
                     + "username VARCHAR(50) NOT NULL, "
                     + "email VARCHAR(100) NOT NULL, "
@@ -72,7 +78,6 @@ public class DataSourceService {
                     + "updated_date DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, "
                     + "FOREIGN KEY (role_id) REFERENCES roles(role_id))";
 
-            // Insert default roles (if not exists)
             String insertRoles = "INSERT INTO roles (role_name) VALUES "
                     + "('ORGANIZATION'), "
                     + "('ADMIN'), "
@@ -81,12 +86,11 @@ public class DataSourceService {
                     + "('EMPLOYEE') "
                     + "ON DUPLICATE KEY UPDATE role_name = role_name";  // Prevent duplicates
 
-            // Execute queries
             jdbcTemplate.execute(createRolesTable);
             jdbcTemplate.execute(createEmployeeTable);
             jdbcTemplate.update(insertRoles);
 
-            String insertEmployee = "INSERT INTO employee (username, email, name, phone, password, role_id, "
+            String insertEmployee = "INSERT INTO users (username, email, name, phone, password, role_id, "
                     + "account_non_locked, account_non_expired, credentials_non_expired, enabled, "
                     + "credentials_expiry_date, account_expiry_date) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -97,15 +101,16 @@ public class DataSourceService {
                     registerRequest.getName(),
                     registerRequest.getPhone(),
                     passwordEncoder.encode(registerRequest.getPassword()),
-                    1,
-                    true, // account_non_locked
-                    true, // account_non_expired
-                    true, // credentials_non_expired
-                    true, // enabled
-                    null, // credentials_expiry_date (can be null or some date)
-                    null  // account_expiry_date (can be null or some date)
+                    1, true, true, true, true, null, null
             );
 
+
+            String createAttendanceTable = "CREATE TABLE attendance (" +
+                    "    id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id BIGINT NOT NULL," +
+                    "    date DATE NOT NULL, clock_in TIME," +
+                    "    clock_out TIME, work_hours TIME, INDEX (user_id, date)" +
+                    ") ;";
+            jdbcTemplate.execute(createAttendanceTable);
 
             System.out.println("Database schema initialized successfully.");
 

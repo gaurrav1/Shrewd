@@ -1,6 +1,5 @@
 package com.shrewd.config;
 
-import com.shrewd.config.hibernate.TenantContext;
 import com.shrewd.config.hibernate.TenantIdentifierResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;

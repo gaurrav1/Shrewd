@@ -34,6 +34,6 @@ public class Role {
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @ToString.Exclude
     @JsonBackReference
-    private Set<Employee> employees = new HashSet<>();
+    private Set<Users> users = new HashSet<>();
 
 }

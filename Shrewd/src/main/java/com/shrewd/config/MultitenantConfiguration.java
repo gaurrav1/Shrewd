@@ -1,37 +1,41 @@
 package com.shrewd.config;
 
-import com.shrewd.repository.orgs.OrganizationRepository;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 public class MultitenantConfiguration {
 
-    private final String DB_URL = "jdbc:mysql://localhost:3306/";
-    private final String DB_USERNAME = "gaurav";
-    private final String DB_PASSWORD = "NGaurav@113";
+    @Value("${spring.datasource.base-url}")
+    private String DB_URL;
+
+    @Value("${spring.datasource.username}")
+    private String DB_USERNAME;
+
+    @Value("${spring.datasource.password}")
+    private String DB_PASSWORD;
 
     @Primary
     @Bean(name = "masterDataSource")
     @ConfigurationProperties(prefix = "tenants")
     public DataSource dataSource() {
-        Map<Object, Object> resolvedDataSources = new HashMap<>();
+        Map<Object, Object> resolvedDataSources = new ConcurrentHashMap<>();
 
-        DataSource defaultDataSource = createDataSource("shrewd");
+        HikariDataSource defaultDataSource = createDataSource("shrewd");
         resolvedDataSources.put("etrhefhredtghbrtghbrtghrtdgh", defaultDataSource);
 
         loadExistingTenants(resolvedDataSources);
@@ -61,14 +65,18 @@ public class MultitenantConfiguration {
         }
     }
 
-    private DataSource createDataSource(String dbName) {
-        String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
-        return DataSourceBuilder.create()
-                .url(DB_URL + dbName)
-                .username(DB_USERNAME)
-                .password(DB_PASSWORD)
-                .driverClassName(DRIVER_CLASS)
-                .build();
+    private HikariDataSource createDataSource(String dbName) {
+        HikariConfig config = new HikariConfig();
+        String jdbcUrl = DB_URL + dbName;
+        System.out.println("Creating datasource for: " + jdbcUrl);
+        config.setJdbcUrl(jdbcUrl);
+        config.setUsername(DB_USERNAME);
+        config.setPassword(DB_PASSWORD);
+        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        config.setMaximumPoolSize(10);
+        config.setMinimumIdle(5);
+        config.setConnectionTimeout(30000);
+        return new HikariDataSource(config);
     }
 
 }
