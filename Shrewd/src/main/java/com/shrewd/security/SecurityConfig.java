@@ -1,6 +1,5 @@
 package com.shrewd.security;
 
-import com.shrewd.security.jwt.AuthEntryPointJwt;
 import com.shrewd.security.jwt.AuthTokenFilter;
 import com.shrewd.security.jwt.JwtUtils;
 import com.shrewd.security.service.CustomUserDetailsService;
@@ -8,6 +7,8 @@ import com.shrewd.security.tenant.TenantFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,23 +18,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
-
-    private final AuthEntryPointJwt unauthorizedHandler;
-
-    public SecurityConfig(AuthEntryPointJwt unauthorizedHandler) {
-        this.unauthorizedHandler = unauthorizedHandler;
-    }
+public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public FilterRegistrationBean<TenantFilter> tenantInterceptorFilter(TenantFilter tenantFilter) {
         FilterRegistrationBean<TenantFilter> registrationBean = new FilterRegistrationBean<>(tenantFilter);
-        registrationBean.setOrder(-100);
+//        registrationBean.setOrder(-100);
+        registrationBean.setOrder(Ordered.LOWEST_PRECEDENCE);
+
         return registrationBean;
     }
 
@@ -56,7 +54,7 @@ public class SecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, JwtUtils jwtUtils, CustomUserDetailsService customUserDetailsService) throws Exception {
         // http.csrf(AbstractHttpConfigurer::disable);
         // https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
-
+        http.cors(withDefaults());
         http.csrf(
                 csrf -> csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                         .ignoringRequestMatchers("/auth/organization/register", "/auth/user/login")
@@ -64,6 +62,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(
                 (requests) -> requests
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/organization/register", "/auth/user/login", "/auth/csrf/csrf-token").permitAll()
                         .requestMatchers("/organization/**", "/user/auth/register").hasAuthority("ORGANIZATION")
                         .anyRequest().authenticated()
@@ -72,8 +71,9 @@ public class SecurityConfig {
         // http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
         http.addFilterBefore(authenticationJwtTokenFilter(jwtUtils, customUserDetailsService), UsernamePasswordAuthenticationFilter.class);
 
-        http.formLogin(withDefaults());
-        http.httpBasic(withDefaults());
+//        http.formLogin(withDefaults());
+//        http.httpBasic(withDefaults());
         return http.build();
     }
+
 }

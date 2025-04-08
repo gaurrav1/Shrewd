@@ -24,7 +24,7 @@ public class TenantFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
         String requestPath = httpServletRequest.getRequestURI();
-
+        System.out.println("\n\nIm here tenant filter\n\n");
         List<String> EXCLUDED_PATHS = List.of("/auth/organization/register","/auth/csrf/csrf-token");
 
 

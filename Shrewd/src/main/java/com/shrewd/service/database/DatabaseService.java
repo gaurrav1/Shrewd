@@ -105,7 +105,7 @@ public class DatabaseService {
             );
 
 
-            String createAttendanceTable = "CREATE TABLE attendance (" +
+            String createAttendanceTable = "CREATE TABLE IF NOT EXISTS attendance (" +
                     "    id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id BIGINT NOT NULL," +
                     "    date DATE NOT NULL, clock_in TIME," +
                     "    clock_out TIME, work_hours TIME, INDEX (user_id, date)" +
