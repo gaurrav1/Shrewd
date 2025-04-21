@@ -1,4 +1,4 @@
-package com.shrewd.model.users;
+package com.shrewd.model.users.model;
 
 import lombok.Getter;
 

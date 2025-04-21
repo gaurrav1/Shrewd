@@ -1,15 +1,12 @@
-package com.shrewd.model.orgs;
+package com.shrewd.model.orgs.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -32,6 +29,18 @@ public class Organization{
 
     @Column(unique = true, nullable = false, name = "tenant_id")
     private String tenantId;
+
+    @Column(name = "jdbc_url", nullable = false)
+    private String jdbcUrl;
+
+    @Column(name = "username", nullable = false)
+    private String username;
+
+    @Column(name = "password", nullable = false)
+    private String password;
+
+    @Column(name = "status")
+    private String status;
 
     @CreationTimestamp
     @Column(updatable = false, name="created_date")

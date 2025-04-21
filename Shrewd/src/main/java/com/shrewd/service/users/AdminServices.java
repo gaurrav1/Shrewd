@@ -1,7 +1,7 @@
 package com.shrewd.service.users;
 
-import com.shrewd.model.users.Users;
-import com.shrewd.repository.users.UsersRepository;
+import com.shrewd.model.users.model.Users;
+import com.shrewd.model.users.repository.UsersRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

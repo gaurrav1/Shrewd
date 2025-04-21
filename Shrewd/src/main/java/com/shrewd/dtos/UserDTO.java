@@ -1,6 +1,6 @@
 package com.shrewd.dtos;
 
-import com.shrewd.model.users.Role;
+import com.shrewd.model.users.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

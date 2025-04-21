@@ -1,7 +1,7 @@
 package com.shrewd.security.tenant;
 
 import com.shrewd.config.TenantContext;
-import com.shrewd.repository.orgs.OrganizationRepository;
+import com.shrewd.model.orgs.repository.OrganizationRepository;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -49,8 +49,8 @@ public class TenantFilter implements Filter {
             return;
         }
 
-        TenantContext.setCurrentTenant(tenantId);
-        System.out.println("\n\n\n TENANT CONTEXT SET TO: " + TenantContext.getCurrentTenant() + "\n\n\n");
+        TenantContext.setTenantId(tenantId);
+        System.out.println("\n\n\n TENANT CONTEXT SET TO: " + TenantContext.getTenantId() + "\n\n\n");
 
         try {
             chain.doFilter(request, response);

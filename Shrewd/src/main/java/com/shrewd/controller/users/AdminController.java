@@ -1,6 +1,6 @@
 package com.shrewd.controller.users;
 
-import com.shrewd.model.users.Users;
+import com.shrewd.model.users.model.Users;
 import com.shrewd.service.users.AdminServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
