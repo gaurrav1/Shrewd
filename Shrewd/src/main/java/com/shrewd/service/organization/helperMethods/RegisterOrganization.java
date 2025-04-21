@@ -1,21 +1,28 @@
 package com.shrewd.service.organization.helperMethods;
 
-import com.shrewd.service.database.DataSourceService;
-import com.shrewd.model.orgs.Organization;
-import com.shrewd.repository.orgs.OrganizationRepository;
+import com.shrewd.model.orgs.model.Organization;
+import com.shrewd.model.orgs.repository.OrganizationRepository;
 import com.shrewd.security.communication.request.OrgRegisterRequest;
 import com.shrewd.security.communication.request.RegisterRequest;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RegisterOrganization {
 
-    private final OrganizationRepository organizationRepository;
-    private final DataSourceService dataSourceService;
+    @Value("${spring.datasource.username}")
+    private String DB_USERNAME;
 
-    public RegisterOrganization(OrganizationRepository organizationRepository,DataSourceService dataSourceService) {
+    @Value("${spring.datasource.password}")
+    private String DB_PASSWORD;
+
+    @Value("${spring.datasource.url}")
+    private String DB_URL;
+
+    private final OrganizationRepository organizationRepository;
+
+    public RegisterOrganization(OrganizationRepository organizationRepository) {
         this.organizationRepository = organizationRepository;
-        this.dataSourceService = dataSourceService;
     }
 
     public boolean isEmailOrTenantExist(OrgRegisterRequest registerRequest) {
@@ -30,11 +37,11 @@ public class RegisterOrganization {
         organization.setOrgName(registerRequest.getOrg_name());
         organization.setPhone(registerRequest.getPhone());
         organization.setAddress(registerRequest.getAddress());
+        organization.setJdbcUrl(DB_URL+registerRequest.getTenant());
+        organization.setUsername(DB_USERNAME);
+        organization.setPassword(DB_PASSWORD);
+        organization.setStatus("ACTIVE");
         return organization;
-    }
-
-    public void initializeTenant(String tenant, RegisterRequest registerRequest) {
-        dataSourceService.registerTenantDataSource(tenant, registerRequest);
     }
 
     public RegisterRequest createEmployeeEntity(OrgRegisterRequest registerRequest) {

@@ -2,17 +2,22 @@ package com.shrewd.service.organization;
 
 import com.shrewd.config.TenantContext;
 import com.shrewd.dtos.OrganizationDTO;
-import com.shrewd.model.orgs.Organization;
-import com.shrewd.repository.orgs.OrganizationRepository;
+import com.shrewd.model.orgs.model.Organization;
+import com.shrewd.model.orgs.repository.OrganizationRepository;
+import com.shrewd.model.users.model.ROLES;
+import com.shrewd.model.users.model.Role;
+import com.shrewd.model.users.repository.roles.RolesRepository;
 import com.shrewd.security.communication.request.OrgRegisterRequest;
 import com.shrewd.security.communication.request.RegisterRequest;
 import com.shrewd.service.database.DatabaseService;
 import com.shrewd.service.organization.helperMethods.RegisterOrganization;
+import com.shrewd.service.users.UsersService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -21,17 +26,20 @@ public class OrganizationService {
     private final OrganizationRepository organizationRepository;
     private final DatabaseService databaseService;
     private final RegisterOrganization registerOrganization;
+    private final UsersService usersService;
+    private final RolesRepository rolesRepository;
 
-    public OrganizationService(OrganizationRepository organizationRepository, DatabaseService databaseService, RegisterOrganization registerOrganization) {
+    public OrganizationService(OrganizationRepository organizationRepository, DatabaseService databaseService, RegisterOrganization registerOrganization, UsersService usersService, RolesRepository rolesRepository) {
         this.organizationRepository = organizationRepository;
         this.databaseService = databaseService;
         this.registerOrganization = registerOrganization;
+        this.usersService = usersService;
+        this.rolesRepository = rolesRepository;
     }
 
 
     // Creating Organization
     public ResponseEntity<?> createOrganization(OrgRegisterRequest registerRequest) {
-        TenantContext.clear();
         if (registerOrganization.isEmailOrTenantExist(registerRequest)) {
             return ResponseEntity.badRequest().body("Error: Email or Tenant is already in use.");
         }
@@ -45,15 +53,26 @@ public class OrganizationService {
         }
 
         try {
+
+            Organization organization = registerOrganization.createOrganizationEntity(registerRequest);
+            organizationRepository.save(organization);
             // 🔹 Create Employee and Save
             RegisterRequest empRegisterRequest = registerOrganization.createEmployeeEntity(registerRequest);
 
-            // 🔹 Set Tenant Context and Initialize DB
-            registerOrganization.initializeTenant(registerRequest.getTenant(), empRegisterRequest);
 
+            databaseService.triggerHibernateDDL(tenant);
+            TenantContext.setTenantId(tenant);
+            Arrays.stream(ROLES.values()).forEach(roleEnum -> {
+                if (!rolesRepository.findByRoleName(roleEnum).isPresent()) {
+                    rolesRepository.save(new Role(roleEnum));
+                }
+            });
+
+            databaseService.createUsersForTenant(empRegisterRequest);
+
+            TenantContext.clear();
             // 🔹 Save Organization
-            Organization organization = registerOrganization.createOrganizationEntity(registerRequest);
-            organizationRepository.save(organization);
+
 
         } catch (Exception e) {
             databaseService.deleteDatabaseForTenant(tenant);

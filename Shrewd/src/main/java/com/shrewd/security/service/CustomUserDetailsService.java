@@ -1,7 +1,7 @@
 package com.shrewd.security.service;
 
-import com.shrewd.model.users.User;
-import com.shrewd.repository.users.UsersRepository;
+import com.shrewd.model.users.model.User;
+import com.shrewd.model.users.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

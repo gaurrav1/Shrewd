@@ -1,6 +1,6 @@
-package com.shrewd.repository.users;
+package com.shrewd.model.users.repository;
 
-import com.shrewd.model.users.Users;
+import com.shrewd.model.users.model.Users;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.springframework.data.jpa.repository.JpaRepository;

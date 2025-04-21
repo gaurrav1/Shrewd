@@ -1,14 +1,12 @@
 package com.shrewd;
 
-import com.shrewd.repository.orgs.OrganizationRepository;
-import com.shrewd.repository.users.UsersRepository;
-import com.shrewd.repository.users.roles.RolesRepository;
+import com.shrewd.model.orgs.repository.OrganizationRepository;
+import com.shrewd.model.users.repository.UsersRepository;
+import com.shrewd.model.users.repository.roles.RolesRepository;
 import com.shrewd.security.communication.request.OrgRegisterRequest;
 import com.shrewd.service.organization.OrganizationService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component

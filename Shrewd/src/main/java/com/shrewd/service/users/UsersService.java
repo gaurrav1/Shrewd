@@ -2,11 +2,11 @@ package com.shrewd.service.users;
 
 import com.shrewd.config.TenantContext;
 import com.shrewd.dtos.UserDTO;
-import com.shrewd.model.users.Users;
-import com.shrewd.model.users.ROLES;
-import com.shrewd.model.users.Role;
-import com.shrewd.repository.users.UsersRepository;
-import com.shrewd.repository.users.roles.RolesRepository;
+import com.shrewd.model.users.model.Users;
+import com.shrewd.model.users.model.ROLES;
+import com.shrewd.model.users.model.Role;
+import com.shrewd.model.users.repository.UsersRepository;
+import com.shrewd.model.users.repository.roles.RolesRepository;
 import com.shrewd.security.communication.request.LoginRequest;
 import com.shrewd.security.communication.request.RegisterRequest;
 import com.shrewd.security.communication.response.LoginResponse;
@@ -122,7 +122,7 @@ public class UsersService {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        String tenantId = TenantContext.getCurrentTenant();
+        String tenantId = TenantContext.getTenantId();
 
         String jwtToken = jwtUtils.generateTokenFromUsername(userDetails, tenantId);
 
