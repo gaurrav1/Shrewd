@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom";
-import { baseApi } from "../backend-api/base";
+import { baseApi } from "../../backend-api/base.js";
 import { jwtDecode } from "jwt-decode";
-import { InputField } from "../components/InputField";
+import { InputField } from "../../components/InputField.jsx";
 import { useState } from "react";
 
 export function Signin() {

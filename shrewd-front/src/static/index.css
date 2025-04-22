@@ -1,0 +1,145 @@
+:root{
+    --color1: #d3b75b;
+    --color2: rgb(43, 72, 105);
+}
+
+body{
+    padding: 80px 0 0 100px;
+    background: rgb(239, 239, 239);
+    overflow-x: hidden;
+}
+.head{
+    position: relative;
+    display: flex;
+    width: calc(100vw - 110px);
+    justify-content: space-around;
+    align-items: center;
+    /* background: brown;    */
+}
+.left{
+    max-width: 640px;
+    padding: 40px;
+    background: rgba(235, 223, 141, 0.3);
+    border-radius: 20%;
+
+}
+.left h3{
+    color: var(--color2);
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+.left p{
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: black;
+    text-transform: capitalize;
+    line-height: 2rem;
+    text-align: justify;
+}
+
+.lower{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.signin {
+    text-decoration: none;
+    color: white;
+    position: relative;
+    background: linear-gradient(45deg, #49a09d, #5f2c82);
+    margin: 13px 13px 13px 0;
+    padding: 10px;
+    font-size: 1.5rem;
+    color: white;
+    overflow: hidden;
+    /* border: 3px solid royalblue; */
+    border-radius: 15px;
+}
+
+.signin::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(235, 223, 141, 0.3);
+    border-radius: 50%;
+    transition: width 0.4s ease, height 0.4s ease, top 0.4s ease, left 0.4s ease;
+    /* transform: translate(-50%, -50%); */
+}
+
+.signin:hover::before {
+    width: 300%;
+    height: 300%;
+    top: -75%;
+    left: -75%;
+}
+
+.shape{
+    position: absolute;
+    height: 200px;
+    width: 200px;
+    background: var(--color1);
+    z-index: -1;
+}
+.shape1{
+    top: 10%;
+    right:0%;
+    transition: transform 3s ease;
+    transform: rotate(35deg);
+    filter: blur(35px);
+}
+.shape2{
+    top:20%;
+    left: 5%;
+    height: 300px;
+    width: 300px;
+    background: #bb68c9;
+    animation: wandering 4s infinite alternate;
+    filter: blur(10px);
+    border-radius: 50% 20% / 10% 40%;
+}
+.shape3{
+    bottom: -20%;
+    left: 2%;
+    height: 150px;
+    width: 150px;
+    filter: blur(30px);
+    transform: rotate(45deg);
+
+}
+.shape4{
+    bottom: -25%;
+    height: 170px;
+    width: 170px;
+    right: 30%;
+    filter: blur(30px);
+    border-radius: 20px;
+    animation: smallrotation 5s infinite alternate;
+}
+@keyframes smallrotation {
+    0%{
+        transform: rotate(0deg);
+    }
+
+    100%{
+        transform: rotate(-10deg);
+    }
+
+}
+@keyframes wandering {
+    0%{
+        transform: translate(30%,-20%) rotate(0deg);
+    }
+    0%{
+        transform: translate(-10%,5%) rotate(90deg);
+    }
+    100%{
+        transform: translate(30%,-20%) rotate(180deg);
+    }
+}
+.right{
+    filter: drop-shadow(2px 4px 16px #d3b75d);
+}

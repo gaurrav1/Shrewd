@@ -1,0 +1,87 @@
+body{
+    user-select: none;
+}
+.main_logo{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 15;
+}
+.main_logo:hover {
+    filter: drop-shadow(13px 9px 19px yellow);
+}
+#navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 10%;
+    left: 1%;
+    margin-right: 5px;
+    border-radius: 19px 0;
+    box-shadow: -3px 3px 79px rgb(139, 71, 71);
+    z-index: 50;
+    cursor: grab;
+    background: linear-gradient(#dfc15f, rgb(80, 123, 172));
+    backdrop-filter: blur(10px);
+    transition: transform 0.5s ease;
+}
+#navbar:hover{
+    transform: rotateX(2deg) rotateY(20deg);
+
+}
+.logo{
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+    border-radius: 19px;
+    pointer-events: none;
+}
+
+.icon_container{
+    cursor: pointer;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: left;
+    flex-direction: column;
+    border-radius: 0 0 19px;
+    background: transparent;
+}
+.icon_container a{
+    text-decoration: none;
+    transition: all 1s ease;
+    margin: 5px;
+    padding: 5px;
+    border-radius: 0 15px 15px 0;
+    stroke: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    opacity: 0.6;
+}
+.icon_container a:hover{
+    box-shadow: 9px 0px 19px rgb(100, 163, 167);
+}
+.title {
+    display: none;
+    align-self: center;
+    margin-left: 13px;
+}
+
+.icon_container a.active {
+    opacity: 1;
+    background-color: antiquewhite;
+    border-bottom: 3px ridge rgba(166, 50, 220, 0.6);
+    border-right: 3px ridge rgba(166, 50, 220, 0.6);
+    stroke: black;
+    color: black;
+    transition: background-color 0.5s ease;
+}
+.nav{
+    display: flex;
+    align-items: baseline;
+}
+
+#navbar:hover .title {
+    display: block;
+}
