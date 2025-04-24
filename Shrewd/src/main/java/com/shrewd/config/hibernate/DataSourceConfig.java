@@ -3,6 +3,7 @@ package com.shrewd.config.hibernate;
 import com.shrewd.config.MultiTenantRoutingDataSource;
 import com.shrewd.config.tenant.TenantDataSourceProvider;
 import jakarta.persistence.EntityManagerFactory;
+import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,17 +37,34 @@ public class DataSourceConfig {
 
     @Bean(name = "entityManagerFactory")
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("customDataSource") DataSource dataSource) {
-        var factory = new LocalContainerEntityManagerFactoryBean();
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(dataSource);
         factory.setPackagesToScan("com.shrewd.model.users");
-        factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+        factory.setJpaVendorAdapter(vendorAdapter);
 
         Map<String, Object> jpaProperties = new HashMap<>();
-        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect"); // or PostgreSQLDialect if needed
+        jpaProperties.put(AvailableSettings.DIALECT, "org.hibernate.dialect.MySQLDialect");
 
         factory.setJpaPropertyMap(jpaProperties);
         return factory;
     }
+
+
+//    @Bean(name = "entityManagerFactory")
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory(@Qualifier("customDataSource") DataSource dataSource) {
+//        var factory = new LocalContainerEntityManagerFactoryBean();
+//        factory.setDataSource(dataSource);
+//        factory.setPackagesToScan("com.shrewd.model.users");
+//        factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+//
+//        Map<String, Object> jpaProperties = new HashMap<>();
+//        jpaProperties.put(AvailableSettings.DIALECT, "org.hibernate.dialect.MySQLDialect"); // or PostgreSQLDialect if needed
+//
+//        factory.setJpaPropertyMap(jpaProperties);
+//        return factory;
+//    }
 
     @Bean(name = "transactionManager")
     public PlatformTransactionManager transactionManager(@Qualifier("entityManagerFactory") EntityManagerFactory emf) {

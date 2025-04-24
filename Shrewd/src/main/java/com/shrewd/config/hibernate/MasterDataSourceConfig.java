@@ -43,8 +43,8 @@ public class MasterDataSourceConfig {
         factory.setPackagesToScan("com.shrewd.model.orgs");
         factory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         Map<String, Object> jpaProperties = new HashMap<>();
-        jpaProperties.put(AvailableSettings.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
-        jpaProperties.put(AvailableSettings.HBM2DDL_AUTO, "update");
+        jpaProperties.put(AvailableSettings.DIALECT, "org.hibernate.dialect.MySQLDialect");
+        jpaProperties.put(AvailableSettings.HBM2DDL_AUTO, "create");
         factory.setJpaPropertyMap(jpaProperties);
         return factory;
     }

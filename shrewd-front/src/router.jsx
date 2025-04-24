@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import {createBrowserRouter} from "react-router-dom";
 import { Home } from "./pages/social/Home.jsx";
 import { Signin } from "./pages/social/Signin.jsx";
 import { Signup } from "./pages/social/Signup.jsx";
@@ -26,6 +26,10 @@ export const router = createBrowserRouter(
                     element: <Dashboard />
                 }
             ]
+        },
+        {
+            path: "*",
+            element: <h1>Okk</h1>
         }
     ]
 )
