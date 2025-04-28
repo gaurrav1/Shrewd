@@ -9,9 +9,9 @@ export const icons = {
 };
 
 const navItems = [
-    { title: 'Home', href: 'home', icon: icons.home },
-    { title: 'How SAPS works?', href: 'home', icon: icons.home },
-    { title: 'Queries', href: 'home', icon: icons.home },
+    { title: 'Shrewd', href: '/', icon: icons.home },
+    { title: 'Explore', href: 'explore', icon: icons.home },
+    { title: 'Pricing', href: 'pricing', icon: icons.home },
     { title: 'Login/ Register', href: 'signup', icon: icons.auth },
 ];
 

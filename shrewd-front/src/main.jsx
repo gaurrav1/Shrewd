@@ -5,9 +5,12 @@ import { router } from './router'
 import './static/main.css'
 import './static/index.css'
 import './static/dock.css'
+import {UserProvider} from "./contexts/UserContext.jsx";
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
+    <StrictMode>
+        <UserProvider>
+            <RouterProvider router={router} />
+        </UserProvider>
+    </StrictMode>,
 )
