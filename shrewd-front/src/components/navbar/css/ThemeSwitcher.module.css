@@ -104,3 +104,21 @@
     background: var(--accent);
     outline: 1px solid rgba(255, 255, 255, 0.3);
 }
+
+/* Add to existing styles */
+.mainBtn.expanded {
+    padding: 0.6rem 1rem;
+}
+
+.mainBtn.expanded .label {
+    display: block;
+    width: auto;
+    opacity: 1;
+}
+
+.label {
+    display: none;
+    width: 0;
+    opacity: 0;
+    transition: all 0.3s ease;
+}

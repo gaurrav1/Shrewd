@@ -3,7 +3,7 @@ import styles from "./css/ThemeSwitcher.module.css";
 import { useTheme, THEMES } from "../../context/ThemeContext";
 import { Contrast, Moon, Sun, Close } from "../../svgs/Svg";
 
-export const ThemeSwitcher = () => {
+export const ThemeSwitcher = ({ hovered }) => {
     const { themePreference, setThemePreference } = useTheme();
     const [open, setOpen] = useState(false);
     const prevThemeRef = useRef(themePreference);
@@ -44,7 +44,7 @@ export const ThemeSwitcher = () => {
     return (
         <div className={styles.wrapper}>
             <button
-                className={styles.mainBtn}
+                className={`${styles.mainBtn} ${hovered ? styles.expanded : ''}`}
                 onClick={handleClick}
                 aria-label="Theme Switcher"
             >
@@ -56,7 +56,9 @@ export const ThemeSwitcher = () => {
                 ) : (
                     <>
                         <span className={styles.icon}>{icons[themePreference]}</span>
-                        <span className={styles.label}>{labels[themePreference]}</span>
+                        {hovered && (
+                            <span className={styles.label}>{labels[themePreference]}</span>
+                        )}
                     </>
                 )}
             </button>

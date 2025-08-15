@@ -1,70 +1,82 @@
-.pers {
-    grid-column: 1;
-    grid-row: 1 / span 2;
+/* Updated Navbar.module.css */
+.navbarContainer {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
 }
 
-#navbar {
+.navbar {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    position: sticky;
-    top: 20px;
-    padding: 20px 10px;
-    border-radius: 24px;
-    z-index: 50;
+    padding: 0 16px;
+    height: 64px;
+    border-radius: 32px;
     background: var(--background-glass);
     backdrop-filter: blur(var(--glass-blur)) saturate(180%);
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
     border: var(--glass-border);
     box-shadow: var(--glass-shadow);
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    max-width: 80px;
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 80px;
+    overflow: hidden;
+    pointer-events: auto;
+    transform-origin: center;
 }
 
-#navbar:hover {
-    transform: translateY(-2px);
+.navbar.scrolled {
+    top: 16px;
+    transform: translateY(-10px);
+}
+
+.navbar:hover, .navbar.expanded {
+    width: 520px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(24px) saturate(200%);
+    -webkit-backdrop-filter: blur(24px) saturate(200%);
     box-shadow:
-            0 8px 40px rgba(0, 0, 0, 0.15),
+            0 10px 30px rgba(0, 0, 0, 0.15),
             0 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 
-/* Remove gradient background */
-.logo {
-    width: 50px;
-    height: 50px;
-    margin: 5px;
-    border-radius: 50%;
-    pointer-events: none;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-    background: transparent;
-}
-
-.icon_container {
+.logoContainer {
     display: flex;
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.icon_container a {
-    text-decoration: none;
-    transition: all 0.3s ease;
-    padding: 12px;
-    border-radius: 14px;
-    color: var(--fg);
-    display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.navItemsContainer {
+    display: flex;
+    gap: 4px;
+    padding: 0 16px;
+    flex: 1;
     justify-content: center;
 }
 
-.icon_container a:hover {
-    background: var(--hover);
-}
-
-.icon_container a.active {
-    background: rgba(var(--accent-rgb), 0.2);
-    color: var(--accent);
+.themeSwitcherWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
 }
