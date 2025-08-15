@@ -1,4 +1,4 @@
-import { useUser } from "../../contexts/UserContext";
+import { useUser } from "../../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
 export function LogoutButton() {

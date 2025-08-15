@@ -1,0 +1,9 @@
+.main_logo{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 15;
+}
+.main_logo:hover {
+    filter: drop-shadow(13px 9px 19px yellow);
+}

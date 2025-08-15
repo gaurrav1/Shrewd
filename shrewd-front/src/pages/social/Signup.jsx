@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { baseApi } from "../../backend-api/base";
+import { baseApi } from "../../api/base";
 import { useNavigate } from "react-router-dom";
 
 export function Signup() {

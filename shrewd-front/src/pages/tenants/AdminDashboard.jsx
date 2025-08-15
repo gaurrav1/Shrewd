@@ -1,4 +1,4 @@
-import { useUser } from "../../contexts/UserContext";
+import { useUser } from "../../context/UserContext";
 import {LogoutButton} from "../../components/tenants/LogoutButton.jsx";
 
 export function AdminDashboard() {

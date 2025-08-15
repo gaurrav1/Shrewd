@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import { baseApi } from "../../backend-api/base";
+import { baseApi } from "../../api/base";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../../contexts/UserContext"; // <<< NEW
+import { useUser } from "../../context/UserContext"; // <<< NEW
 
 export function Signin() {
   const { register, handleSubmit, formState: { errors } } = useForm();

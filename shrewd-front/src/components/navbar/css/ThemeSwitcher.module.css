@@ -1,0 +1,106 @@
+.wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.mainBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--h6-size);
+    font-weight: bold;
+    padding: 0.6rem 0;
+    border: none;
+    background: var(--background-glass);
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    backdrop-filter: blur(var(--glass-blur));
+}
+
+.mainBtn:hover {
+    background: var(--hover);
+    transform: scale(1.06);
+}
+
+.slider {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.7rem;
+    background: var(--background-glass);
+    border: var(--glass-border);
+    border-radius: 1.2rem;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+    backdrop-filter: blur(var(--glass-blur));
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.95rem;
+    padding: 0.6rem 1.1rem;
+    border: none;
+    background: transparent;
+    border-radius: 0.9rem;
+    cursor: pointer;
+    transition:
+            background 0.2s,
+            color 0.2s;
+}
+
+.btn:hover {
+    background: var(--hover);
+}
+
+.active {
+    background: var(--accent);
+    color: #fff;
+    outline: 2px solid var(--accent);
+}
+
+.icon {
+    font-size: 1.5rem;
+}
+
+.icon svg {
+    vertical-align: middle;
+}
+
+.label {
+    font-size: .8rem;
+    color: var(--fg);
+    font-weight: 500;
+}
+
+.mainBtn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.slider {
+    background: rgba(40, 40, 40, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 18px;
+}
+
+.btn {
+    background: transparent;
+    border-radius: 14px;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.active {
+    background: var(--accent);
+    outline: 1px solid rgba(255, 255, 255, 0.3);
+}
