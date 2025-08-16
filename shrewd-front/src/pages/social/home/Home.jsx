@@ -10,6 +10,7 @@ export function Home() {
   return (
       <div className={styles.container}>
           <MenuBar />
+          <ShrewdIcon />
           <div className={styles.content}>
               <Header />
           </div>

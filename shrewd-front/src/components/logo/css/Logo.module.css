@@ -1,5 +1,9 @@
 .main_logo{
     z-index: 15;
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    box-shadow: 0 4px 24px 0 rgba(31, 38, 135, 0.1);
+    border-radius: 24px;
 }
 .main_logo:hover {
     filter: drop-shadow(13px 9px 19px yellow);

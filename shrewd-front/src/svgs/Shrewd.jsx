@@ -3,57 +3,57 @@ export const ShrewdIcon = ({ height = 256, width = 256 }) => {
         <svg
             width={width}
             height={height}
-            viewBox="0 0 256 256"
+            viewBox="0 0 200 200"
             xmlns="http://www.w3.org/2000/svg"
             role="img"
             aria-label="Shrewd logo"
         >
             <defs>
-                <linearGradient id="shrewdGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FF3B30" />
-                    <stop offset="100%" stopColor="#A00" />
+                {/* Modern multi-stop gradient */}
+                <linearGradient id="shrewdGradient" x1="10%" y1="10%" x2="90%" y2="90%">
+                    <stop offset="0%" stopColor="#07765E" />
+                    <stop offset="45%" stopColor="#0A8A6F" />
+                    <stop offset="100%" stopColor="#14D9B3" />
                 </linearGradient>
-                <linearGradient id="circuitPattern" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FFA39C" stopOpacity="0.55" />
-                    <stop offset="100%" stopColor="#FF7066" stopOpacity="0.8" />
+
+                {/* Subtle inner shadow for depth */}
+                <filter id="innerShadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur" />
+                    <feOffset in="blur" dx="1" dy="1" result="offsetBlur" />
+                    <feComposite in="SourceGraphic" in2="offsetBlur" operator="over" />
+                </filter>
+
+                {/* Subtle highlight effect */}
+                <linearGradient id="highlight" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
                 </linearGradient>
-                <pattern id="techPattern" patternUnits="userSpaceOnUse" width="8" height="8">
-                    <path d="M0 0L8 8ZM8 0L0 8Z" stroke="#fff" strokeWidth="0.5" strokeOpacity="0.3" />
-                </pattern>
             </defs>
 
-            {/* Shrew head with gradient and tech pattern */}
+            {/* Main shape with refined geometry */}
             <path
-                d="M30,168C30,102,86,54,140,54C167,54,185,63,200,78C212,90,218,102,221,114C224,124,224,131,224,136C224,140,226,144,230,147C235,151,241,154,246,156C248,157,248,160,246,161C241,163,234,164,227,163C214,160,203,158,190,159C172,160,156,168,142,175C122,186,106,192,84,193C55,195,30,185,30,168Z"
+                d="M100,40 C64.7,40 36,68.7 36,104 C36,139.3 64.7,168 100,168 C135.3,168 164,139.3 164,104 C164,68.7 135.3,40 100,40 Z
+                M76,95 Q76,80 91,70 Q106,60 121,70 Q136,80 136,95 Q136,110 121,120 Q106,130 91,120 Q76,110 76,95 Z"
                 fill="url(#shrewdGradient)"
+                filter="url(#innerShadow)"
             />
 
-            {/* Tech-enhanced ear */}
-            <circle cx="170" cy="86" r="18" fill="url(#shrewdGradient)" />
-            <circle
-                cx="170"
-                cy="86"
-                r="9"
-                fill="url(#circuitPattern)"
-                style={{ mixBlendMode: "lighten" }}
-            />
-
-            {/* Futuristic eye */}
-            <circle
-                cx="182"
-                cy="112"
-                r="4.5"
-                fill="#111"
-                opacity="0.9"
-            >
-                <animate attributeName="r" values="4.5;5;4.5" dur="2s" repeatCount="indefinite" />
-            </circle>
-
-            {/* Jaw notch with tech pattern */}
+            {/* Refined ear element */}
             <path
-                d="M146 172C156 167 162 165 168 165C160 171 152 174 144 175Z"
-                fill="url(#techPattern)"
-                opacity="0.7"
+                d="M136,56 Q150,48 158,62 Q152,72 142,76 Q136,66 136,56 Z"
+                fill="#07765E"
+                opacity="0.95"
+            />
+
+            {/* Refined eye with dynamic highlight */}
+            <circle cx="116" cy="90" r="7" fill="#062A20" />
+            <circle cx="113" cy="87" r="2" fill="#FFFFFF" opacity="0.9" />
+
+            {/* Subtle highlight overlay */}
+            <path
+                d="M100,46 C68.7,46 43,71.7 43,103 C43,110.4 44.3,117.5 46.6,124 C76,118 110,124 135,146 C153.7,132.7 164,118.8 164,103 C164,71.7 138.3,46 100,46 Z"
+                fill="url(#highlight)"
+                opacity="0.15"
             />
         </svg>
     )
@@ -70,66 +70,68 @@ export const ShrewdHorizontalLookUpIcon = ({ width = 640, height = 192 }) => {
             aria-label="Shrewd logo lockup"
         >
             <defs>
-                <linearGradient id="lockupGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#0F0F0F" />
-                    <stop offset="100%" stopColor="#333" />
+                <linearGradient id="lockupGradient" x1="10%" y1="10%" x2="90%" y2="90%">
+                    <stop offset="0%" stopColor="#07765E" />
+                    <stop offset="45%" stopColor="#0A8A6F" />
+                    <stop offset="100%" stopColor="#14D9B3" />
                 </linearGradient>
-                <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FF3B30" />
-                    <stop offset="100%" stopColor="#C00" />
-                </linearGradient>
-                <filter id="techGlow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
-                    <feFlood floodColor="#FF3B30" floodOpacity="0.5" result="glowColor" />
-                    <feComposite in="glowColor" in2="blur" operator="in" result="glow" />
-                    <feMerge>
-                        <feMergeNode in="glow" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
+
+                <filter id="textShadow" x="-10%" y="-10%" width="120%" height="120%">
+                    <feDropShadow dx="0" dy="1" stdDeviation="0.5" floodOpacity="0.15" />
                 </filter>
+
+                <linearGradient id="iconHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.2" />
+                    <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
+                </linearGradient>
+
+                <style>
+                    {`
+                    .shrewd-text {
+                        font-family: 'Inter', 'SF Pro Display', -apple-system, system-ui, 'Segoe UI', Roboto, Arial, sans-serif;
+                        font-weight: 700;
+                        letter-spacing: -0.025em;
+                        fill: #062A20;
+                        filter: url(#textShadow);
+                    }
+                    .tagline {
+                        font-family: 'Inter', sans-serif;
+                        font-weight: 500;
+                        letter-spacing: 0.04em;
+                        fill: #426962;
+                        text-transform: uppercase;
+                    }
+                    `}
+                </style>
             </defs>
 
-            {/* Tech-enhanced icon */}
-            <g transform="translate(8,16)" filter="url(#techGlow)">
+            {/* Icon - perfectly positioned */}
+            <g transform="translate(32, 20) scale(0.75)">
                 <path
-                    d="M0,120C0,58,49,16,102,16C126,16,142,24,156,38C167,49,173,60,176,71C178,80,178,87,178,92C178,96,180,100,184,103C188,106,195,110,200,111C202,112,202,115,200,116C195,118,188,119,181,118C169,115,158,114,145,115C127,116,112,124,99,131C80,141,65,148,45,149C18,151,0,140,0,120Z"
-                    fill="url(#iconGradient)"
+                    d="M100,40 C64.7,40 36,68.7 36,104 C36,139.3 64.7,168 100,168 C135.3,168 164,139.3 164,104 C164,68.7 135.3,40 100,40 Z
+                    M76,95 Q76,80 91,70 Q106,60 121,70 Q136,80 136,95 Q136,110 121,120 Q106,130 91,120 Q76,110 76,95 Z"
+                    fill="url(#lockupGradient)"
                 />
-                <circle cx="124" cy="32" r="14" fill="url(#iconGradient)" />
-                <circle
-                    cx="124"
-                    cy="32"
-                    r="7"
-                    fill="#FFA39C"
-                    opacity="0.55"
-                    style={{ mixBlendMode: "lighten" }}
+                <path
+                    d="M136,56 Q150,48 158,62 Q152,72 142,76 Q136,66 136,56 Z"
+                    fill="#07765E"
+                    opacity="0.95"
                 />
-                <circle cx="135" cy="54" r="4" fill="#111" opacity="0.9" />
+                <circle cx="116" cy="90" r="7" fill="#062A20" />
+                <circle cx="113" cy="87" r="2" fill="#FFFFFF" opacity="0.9" />
+                <path
+                    d="M100,46 C68.7,46 43,71.7 43,103 C43,110.4 44.3,117.5 46.6,124 C76,118 110,124 135,146 C153.7,132.7 164,118.8 164,103 C164,71.7 138.3,46 100,46 Z"
+                    fill="url(#iconHighlight)"
+                    opacity="0.15"
+                />
             </g>
 
-            {/* Modern wordmark */}
-            <text
-                x="240"
-                y="118"
-                fontSize="96"
-                fill={'var(--svg-color)'}
-                fontWeight="800"
-                letterSpacing="0.02em"
-                fontFamily='Inter, "SF Pro Display", -apple-system, system-ui, "Segoe UI", Roboto, Arial, sans-serif'
-            >
-                SHREWD
-            </text>
+            {/* Modern wordmark with refined spacing */}
+            <text x="170" y="110" className="shrewd-text" fontSize="78">SHREWD</text>
 
-            {/* Tech tagline */}
-            <text
-                x="242"
-                y="160"
-                fontSize="20"
-                fill="#666"
-                fontWeight="600"
-                fontFamily="Inter, sans-serif"
-            >
-                SMART ATTENDANCE & PAYROLL
+            {/* Professional tagline with refined positioning */}
+            <text x="172" y="142" className="tagline" fontSize="16">
+                MODERN WORKFORCE SOLUTIONS
             </text>
         </svg>
     )
