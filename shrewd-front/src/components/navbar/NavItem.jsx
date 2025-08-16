@@ -8,7 +8,7 @@ export const NavItem = ({ title, href, icon: Icon, hovered, index }) => (
         style={{ transitionDelay: hovered ? `${index * 80}ms` : '0ms' }}
     >
         <div className={styles.iconContainer}>
-            <img src={Icon} alt={`${title} icon`} width={24} height={24} />
+            <Icon />
         </div>
         <span className={styles.title}>{title}</span>
     </Link>
