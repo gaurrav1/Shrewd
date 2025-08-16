@@ -7,6 +7,7 @@ import {PriceIcon} from '../../svgs/NavSvgs.jsx'
 import {ExploreIcon} from '../../svgs/NavSvgs.jsx';
 import { ThemeSwitcher } from "./ThemeSwitcher.jsx";
 import styles from "./css/Navbar.module.css";
+import {ShrewdIcon} from "../../svgs/Shrewd.jsx";
 
 export const icons = {
     home: HomeIcon,
@@ -41,9 +42,6 @@ export const Navbar = () => {
             onMouseLeave={() => setHovered(false)}
         >
             <div className={`${styles.navbar} ${hovered ? styles.expanded : ''}`}>
-                {/*<div className={styles.logoContainer}>*/}
-                {/*    <img src={logo} alt="logo" className={styles.logo} />*/}
-                {/*</div>*/}
 
                 <div className={styles.navItemsContainer}>
                     {navItems.map((item, index) => (
@@ -56,9 +54,6 @@ export const Navbar = () => {
                     ))}
                 </div>
 
-                {/*<div className={styles.themeSwitcherWrapper}>*/}
-                {/*    <ThemeSwitcher hovered={hovered} />*/}
-                {/*</div>*/}
             </div>
         </div>
     );
